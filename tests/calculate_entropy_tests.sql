@@ -345,7 +345,7 @@ BEGIN
 END
 go
 
-CREATE OR ALTER PROCEDURE Test_Calculate_Information_Gain.Test__Interface__Input__dbo_Information_Gain
+CREATE OR ALTER PROCEDURE Test_Calculate_Information_Gain.Test__Interface__Input__dbo_Calculate_Information_Gain
 as
 BEGIN
 
@@ -415,5 +415,246 @@ BEGIN
 END
 go
 
+
+
+
+CREATE OR ALTER PROCEDURE Test_Calculate_Information_Gain.Test__Interface__Output__dbo_Calculate_Information_Gain 
+as
+BEGIN
+
+	/*Set Up*/
+	select
+	column_name
+	,data_type_name
+	,is_nullable
+	,precision
+	,scale,max_length
+	into #Expected
+	from
+	(values
+		('@Information_Gain','decimal',1,9,8,5)
+	) as Expected(column_name,data_type_name,is_nullable,precision,scale,max_length)
+
+	/*Execute*/
+	select
+	par.name as[column_name]
+	,t.name as [data_type_name]
+	,par.is_nullable
+	,par.precision
+	,par.scale
+	,par.max_length
+	into #Actual
+	from
+	sys.procedures p
+	inner join
+	sys.parameters par
+	on
+	par.object_id=p.object_id
+	inner join
+	sys.types t
+	on
+	par.user_type_id=t.user_type_id
+	where
+	p.name='Calculate_Information_Gain'
+	and
+	p.schema_id=schema_id('dbo')
+	and
+	par.is_output =1
+
+	/*Test*/
+	execute tSQLt.AssertEqualsTable @Expected='#Expected',@Actual='#Actual'
+END
+go
+
+
+exec tSQLt.NewTestClass 'Test_Calculate_Information_Gain_Parent_Entropy';
+go
+CREATE OR ALTER PROCEDURE Test_Calculate_Information_Gain_Parent_Entropy.Test__Object__Exists__dbo_Calculate_Information_Gain_Parent_Entropy 
+as
+BEGIN
+
+	exec tSQLt.AssertObjectExists 
+	@ObjectName = 'dbo.Calculate_Information_Gain_Parent_Entropy'
+END
+go
+
+
+CREATE OR ALTER PROCEDURE Test_Calculate_Information_Gain_Parent_Entropy.Test__Interface__Input__dbo_Calculate_Information_Gain_Parent_Entropy
+as
+BEGIN
+
+	/*Set Up*/
+	Create table #Expected (
+	column_name sysname
+	,data_type_name  sysname
+	,is_nullable bit
+	,precision int
+	,scale int
+	,max_length int
+	);
+
+	Create table #Actual (
+	column_name sysname
+	,data_type_name  sysname
+	,is_nullable bit
+	,precision int
+	,scale int
+	,max_length int
+	);
+
+	insert into #Expected
+	select
+	column_name
+	,data_type_name
+	,is_nullable
+	,precision
+	,scale
+	,max_length
+	from
+	(values
+		('@Information_Gain_Dataset','Information_Gain_Dataset',1,0,0,-1)
+	) as Expected(column_name,data_type_name,is_nullable,precision,scale,max_length)
+
+
+	/*Execute*/
+	insert into #Actual
+	select
+	par.name as[column_name]
+	,t.name as [data_type_name]
+	,par.is_nullable
+	,par.precision
+	,par.scale
+	,par.max_length
+	from
+	sys.procedures p
+	inner join
+	sys.parameters par
+	on
+	par.object_id=p.object_id
+	inner join
+	sys.types t
+	on
+	par.user_type_id=t.user_type_id
+	where
+	p.name='Calculate_Information_Gain_Parent_Entropy'
+	and
+	p.schema_id=schema_id('dbo')
+	and
+	par.is_output =0
+
+
+	/*Test*/
+	execute tSQLt.AssertEqualsTable @Expected='#Expected',@Actual='#Actual'
+
+END
+go
+
+CREATE OR ALTER PROCEDURE Test_Calculate_Information_Gain_Parent_Entropy.Test__Interface__Output__dbo_Calculate_Information_Gain_Parent_Entropy 
+as
+BEGIN
+
+	/*Set Up*/
+	select
+	column_name
+	,data_type_name
+	,is_nullable
+	,precision
+	,scale,max_length
+	into #Expected
+	from
+	(values
+		('@Parent_Entropy','decimal',1,9,8,5)
+	) as Expected(column_name,data_type_name,is_nullable,precision,scale,max_length)
+
+	/*Execute*/
+	select
+	par.name as[column_name]
+	,t.name as [data_type_name]
+	,par.is_nullable
+	,par.precision
+	,par.scale
+	,par.max_length
+	into #Actual
+	from
+	sys.procedures p
+	inner join
+	sys.parameters par
+	on
+	par.object_id=p.object_id
+	inner join
+	sys.types t
+	on
+	par.user_type_id=t.user_type_id
+	where
+	p.name='Calculate_Information_Gain_Parent_Entropy'
+	and
+	p.schema_id=schema_id('dbo')
+	and
+	par.is_output =1
+
+	/*Test*/
+	execute tSQLt.AssertEqualsTable @Expected='#Expected',@Actual='#Actual'
+END
+go
+
+
+
+CREATE OR ALTER PROCEDURE Test_Calculate_Information_Gain_Parent_Entropy.Test__dbo_Calculate_Information_Gain_Parent_Entropy__2__Class__Input 
+as
+BEGIN
+
+	/*Set Up*/
+	declare @Information_Gain_Dataset Information_Gain_Dataset;
+	declare @Actual_Parent_Entropy decimal(9,8);
+	declare @Expected_Parent_Entropy decimal(9,8)=.99679163;
+
+	insert into @Information_Gain_Dataset
+	Values('LessThan50K','Group 1',12);
+	insert into @Information_Gain_Dataset
+	Values('LessThan50K','Group 2',1);
+	insert into @Information_Gain_Dataset
+	Values('MoreThan50K','Group 1',4);
+	insert into @Information_Gain_Dataset
+	Values('MoreThan50K','Group 2',13);
+
+
+	/*Execute*/
+	execute dbo.Calculate_Information_Gain_Parent_Entropy
+	@Information_Gain_Dataset = @Information_Gain_Dataset 
+	,@Parent_Entropy=@Actual_Parent_Entropy OUTPUT;
+
+	/*Test*/
+	execute tSQLt.AssertEquals @Expected=@Expected_Parent_Entropy,@Actual=@Actual_Parent_Entropy
+END
+go
+
+CREATE OR ALTER PROCEDURE Test_Calculate_Information_Gain.Test__dbo_Calculate_Information_Gain__2__Class__Input 
+as
+BEGIN
+
+	/*Set Up*/
+	declare @Information_Gain_Dataset Information_Gain_Dataset;
+	declare @Actual_Information_Gain decimal(9,8);
+	declare @Expected_Information_Gain decimal(9,8)=.13;
+
+	insert into @Information_Gain_Dataset
+	Values('LessThan50K','Group 1',12);
+	insert into @Information_Gain_Dataset
+	Values('LessThan50K','Group 2',1);
+	insert into @Information_Gain_Dataset
+	Values('MoreThan50K','Group 1',4);
+	insert into @Information_Gain_Dataset
+	Values('MoreThan50K','Group 2',13);
+
+
+	/*Execute*/
+	execute dbo.Calculate_Information_Gain
+	@Information_Gain_Dataset = @Information_Gain_Dataset 
+	,@Information_Gain=@Actual_Information_Gain OUTPUT;
+
+	/*Test*/
+	execute tSQLt.AssertEquals @Expected=@Expected_Information_Gain,@Actual=@Actual_Information_Gain
+END
+go
 exec tSQLt.RunAll;
 
