@@ -5,6 +5,7 @@ go
 CREATE OR ALTER PROCEDURE Test_Calculate_Entropy.Test__Object__Exists__dbo_Calculate_Entropy 
 as
 BEGIN
+	SET NOCOUNT ON;
 
 	exec tSQLt.AssertObjectExists 
 	@ObjectName = 'dbo.Calculate_Entropy'
@@ -14,6 +15,7 @@ go
 CREATE OR ALTER PROCEDURE Test_Calculate_Entropy.Test__Object__Exists__dbo_Entropy_Dataset 
 as
 BEGIN
+	SET NOCOUNT ON;
 
 	if not exists (select 1 from sys.types where name = 'Entropy_Dataset')
 		exec tSQLt.Fail @Message0='Table Type object dbo.Entropy_Dataset does not exist'
@@ -24,6 +26,7 @@ go
 CREATE OR ALTER PROCEDURE Test_Calculate_Entropy.Test__Columns__dbo_Entropy_Dataset 
 as
 BEGIN
+	SET NOCOUNT ON;
 
 	/*Set Up*/
 	select
@@ -75,6 +78,7 @@ go
 CREATE OR ALTER PROCEDURE Test_Calculate_Entropy.Test__Interface__Input__dbo_Calculate_Entropy 
 as
 BEGIN
+	SET NOCOUNT ON;
 
 	/*Set Up*/
 	select
@@ -126,6 +130,7 @@ go
 CREATE OR ALTER PROCEDURE Test_Calculate_Entropy.Test__Interface__Output__dbo_Calculate_Entropy 
 as
 BEGIN
+	SET NOCOUNT ON;
 
 	/*Set Up*/
 	select
@@ -175,6 +180,7 @@ go
 CREATE OR ALTER PROCEDURE Test_Calculate_Entropy.Test__dbo_Calculate_Entropy__2__Row__Input 
 as
 BEGIN
+	SET NOCOUNT ON;
 
 	/*Set Up*/
 	declare @Entropy_Dataset Entropy_Dataset;
@@ -200,6 +206,7 @@ go
 CREATE OR ALTER PROCEDURE Test_Calculate_Entropy.Test__dbo_Calculate_Entropy__1__Row__Input 
 as
 BEGIN
+	SET NOCOUNT ON;
 
 	/*Set Up*/
 	declare @Entropy_Dataset Entropy_Dataset;
@@ -222,6 +229,7 @@ go
 CREATE OR ALTER PROCEDURE Test_Calculate_Entropy.Test__dbo_Calculate_Entropy__Multi__Row__Input 
 as
 BEGIN
+	SET NOCOUNT ON;
 
 	/*Set Up*/
 	declare @Entropy_Dataset Entropy_Dataset;
@@ -249,6 +257,7 @@ go
 CREATE OR ALTER PROCEDURE Test_Calculate_Entropy.Test__dbo_Calculate_Entropy__4__Row__Input 
 as
 BEGIN
+	SET NOCOUNT ON;
 
 	/*Set Up*/
 	declare @Entropy_Dataset Entropy_Dataset;
@@ -279,6 +288,7 @@ go
 CREATE OR ALTER PROCEDURE Test_Calculate_Information_Gain.Test__Object__Exists__dbo_Calculate_Information_Gain 
 as
 BEGIN
+	SET NOCOUNT ON;
 
 	exec tSQLt.AssertObjectExists 
 	@ObjectName = 'dbo.Calculate_Information_Gain'
@@ -288,6 +298,7 @@ go
 CREATE OR ALTER PROCEDURE Test_Calculate_Information_Gain.Test__Object__Exists__dbo_Information_Gain_Dataset 
 as
 BEGIN
+	SET NOCOUNT ON;
 
 	if not exists (select 1 from sys.types where name = 'Information_Gain_Dataset')
 		exec tSQLt.Fail @Message0='Table Type object dbo.Information_Gain_Dataset does not exist'
@@ -298,6 +309,7 @@ go
 CREATE OR ALTER PROCEDURE Test_Calculate_Information_Gain.Test__Columns__dbo_Information_Gain_Dataset
 as
 BEGIN
+	SET NOCOUNT ON;
 
 	/*Set Up*/
 	select
@@ -348,6 +360,7 @@ go
 CREATE OR ALTER PROCEDURE Test_Calculate_Information_Gain.Test__Interface__Input__dbo_Calculate_Information_Gain
 as
 BEGIN
+	SET NOCOUNT ON;
 
 	/*Set Up*/
 	Create table #Expected (
@@ -421,6 +434,7 @@ go
 CREATE OR ALTER PROCEDURE Test_Calculate_Information_Gain.Test__Interface__Output__dbo_Calculate_Information_Gain 
 as
 BEGIN
+	SET NOCOUNT ON;
 
 	/*Set Up*/
 	select
@@ -482,6 +496,7 @@ go
 CREATE OR ALTER PROCEDURE Test_Calculate_Information_Gain_Parent_Entropy.Test__Interface__Input__dbo_Calculate_Information_Gain_Parent_Entropy
 as
 BEGIN
+	SET NOCOUNT ON;
 
 	/*Set Up*/
 	Create table #Expected (
@@ -552,6 +567,7 @@ go
 CREATE OR ALTER PROCEDURE Test_Calculate_Information_Gain_Parent_Entropy.Test__Interface__Output__dbo_Calculate_Information_Gain_Parent_Entropy 
 as
 BEGIN
+	SET NOCOUNT ON;
 
 	/*Set Up*/
 	select
@@ -602,6 +618,7 @@ go
 CREATE OR ALTER PROCEDURE Test_Calculate_Information_Gain_Parent_Entropy.Test__dbo_Calculate_Information_Gain_Parent_Entropy__2__Class__Input 
 as
 BEGIN
+	SET NOCOUNT ON;
 
 	/*Set Up*/
 	declare @Information_Gain_Dataset Information_Gain_Dataset;
@@ -631,11 +648,11 @@ go
 CREATE OR ALTER PROCEDURE Test_Calculate_Information_Gain.Test__dbo_Calculate_Information_Gain__2__Class__Input 
 as
 BEGIN
-
+	SET NOCOUNT ON;
 	/*Set Up*/
 	declare @Information_Gain_Dataset Information_Gain_Dataset;
 	declare @Actual_Information_Gain decimal(9,8);
-	declare @Expected_Information_Gain decimal(9,8)=.13;
+	declare @Expected_Information_Gain decimal(9,8)=.38121435;
 
 	insert into @Information_Gain_Dataset
 	Values('LessThan50K','Group 1',12);
@@ -657,4 +674,5 @@ BEGIN
 END
 go
 exec tSQLt.RunAll;
+
 

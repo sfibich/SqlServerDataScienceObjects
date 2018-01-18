@@ -16,6 +16,7 @@ CREATE OR ALTER PROCEDURE dbo.Calculate_Entropy
 ,@Entropy decimal(9,8) OUTPUT
 AS
 BEGIN
+	SET NOCOUNT ON;
 
 	declare @Internal_Entropy_Dataset Entropy_Dataset;
 	insert into 
